@@ -1,0 +1,29 @@
+services:
+    sqs_job_queue.client:
+        class: Aws\Sqs\SqsClient
+        factory: [Aws\Sqs\SqsClient, factory]
+        arguments:
+            - key: %sqs_job_queue.aws.key%
+              secret: %sqs_job_queue.aws.secret%
+              region: %sqs_job_queue.aws.region%
+        lazy: true
+
+    sqs_job_queue.queue:
+        class: Tavii\SQSJobQueue\Queue
+        arguments:
+            - @sqs_job_queue.client
+        lazy: true
+
+    sqs_job_queue.worker:
+        class: Tavii\SQSJobQueue\Worker
+        arguments:
+            - @sqs_job_queue.queue
+            - @sqs_job_queue.storage.doctrine
+
+    ###
+    # storage
+    ###
+    sqs_job_queue.storage.doctrine:
+        class: Tavii\SQSJobQueue\Storage\DoctrineStorage
+        arguments:
+            - @doctrine.dbal.default_connection
