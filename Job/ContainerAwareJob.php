@@ -1,7 +1,7 @@
 <?php
 namespace Tavii\SQSJobQueueBundle\Job;
 
-use Tavii\SQSJobQueue\Job
+use Tavii\SQSJobQueue\Job;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
