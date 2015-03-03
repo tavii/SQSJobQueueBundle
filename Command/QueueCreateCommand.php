@@ -1,0 +1,38 @@
+<?php
+namespace Tavii\SQSJobQueueBundle\Command;
+
+
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+class QueueCreateCommand extends ContainerAwareCommand
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure()
+    {
+        $this->setName('sqs_job_queue:queue-create')
+            ->setDescription('create queue')
+            ->addArgument('queue', InputArgument::REQUIRED, 'queue name')
+            ->addOption('deleySec', 'S', InputOption::VALUE_OPTIONAL, 'DelaySeconds', 0)
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(InputInterface $input, OutputInterface $output)
+    {
+        $client = $this->getContainer()->get('sqs_job_queue.client');
+        $client->createQueue(array(
+            'QueueName' => $input->getArgument('queue'),
+            'Attributes' => array(
+                'DelaySeconds' => $input->getOption('deleySec')
+            ),
+        ));
+    }
+}
