@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/tavii/SQSJobQueueBundle.svg)](https://travis-ci.org/tavii/SQSJobQueueBundle)
 [![Coverage Status](https://coveralls.io/repos/tavii/SQSJobQueueBundle/badge.svg?branch=master)](https://coveralls.io/r/tavii/SQSJobQueueBundle?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tavii/SQSJobQueueBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/tavii/SQSJobQueueBundle/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/tavii/sqs-job-queue-bundle/v/stable.svg)](https://packagist.org/packages/tavii/sqs-job-queue-bundle) [![Total Downloads](https://poser.pugx.org/tavii/sqs-job-queue-bundle/downloads.svg)](https://packagist.org/packages/tavii/sqs-job-queue-bundle) [![Latest Unstable Version](https://poser.pugx.org/tavii/sqs-job-queue-bundle/v/unstable.svg)](https://packagist.org/packages/tavii/sqs-job-queue-bundle) [![License](https://poser.pugx.org/tavii/sqs-job-queue-bundle/license.svg)](https://packagist.org/packages/tavii/sqs-job-queue-bundle)
 
 [SQSJobQueue](https://github.com/tavii/SQSJobQueue)をSymfony2で扱う為のバンドル。  
 作った背景としては、Amaazon SQSを[BCCResqueBundle](https://github.com/michelsalib/BCCResqueBundle)と同じような感じで、Jobを利用した処理ができるということを目的につくりました。
