@@ -1,7 +1,6 @@
 <?php
 namespace Tavii\SQSJobQueueBundle;
 
-use Aws\Sqs\SqsClient;
 use Tavii\SQSJobQueue\Job\JobInterface;
 use Tavii\SQSJobQueue\Message\MessageInterface;
 use Tavii\SQSJobQueue\Queue\Queue as BaseQueue;
@@ -32,11 +31,14 @@ class Queue implements QueueInterface
     public function pull($name)
     {
         $message = $this->baseQueue->pull($name);
-        $job = $message->getJob();
-        if ($job instanceof ContainerAwareJob) {
-            $job->setKernelOptions($this->kernelOptions);
+        if ($message instanceof MessageInterface) {
+            $job = $message->getJob();
+            if ($job instanceof ContainerAwareJob) {
+                $job->setKernelOptions($this->kernelOptions);
+            }
+            return $message;
         }
-        return $message;
+        return null;
     }
 
     /**
