@@ -9,13 +9,13 @@ services:
         lazy: true
 
     sqs_job_queue.queue:
-        class: Tavii\SQSJobQueue\Queue
+        class: Tavii\SQSJobQueue\Queue\Queue
         arguments:
             - @sqs_job_queue.client
         lazy: true
 
     sqs_job_queue.worker:
-        class: Tavii\SQSJobQueue\Worker
+        class: Tavii\SQSJobQueue\Worker\Worker
         arguments:
             - @sqs_job_queue.queue
             - @sqs_job_queue.storage.doctrine

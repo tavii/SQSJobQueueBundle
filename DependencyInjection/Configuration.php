@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('tavii_sqs_job_queue');
+        $rootNode = $treeBuilder->root('sqs_job_queue');
 
         $rootNode->children()
             ->arrayNode('aws')

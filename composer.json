@@ -12,6 +12,12 @@
       "symfony/symfony": "~2.3",
       "doctrine/dbal": "~2.3"
     },
+    "require-dev": {
+        "phpunit/phpunit": "4.4.*",
+        "phpunit/phpcov": "*",
+        "phake/phake": "2.0.*@dev",
+        "satooshi/php-coveralls": "dev-master"
+    },
     "autoload": {
       "psr-4": {
         "Tavii\\SQSJobQueueBundle\\": ""
