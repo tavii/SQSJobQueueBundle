@@ -9,9 +9,13 @@
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src/</directory>
+            <exclude>
+                <directory>./Test/cache/*/*</directory>
+            </exclude>
         </whitelist>
         <blacklist>
             <exclude>
+
                 <file>./src/*/*Interface.php</file>
             </exclude>
         </blacklist>

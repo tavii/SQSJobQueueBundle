@@ -9,9 +9,10 @@ services:
         lazy: true
 
     sqs_job_queue.queue:
-        class: Tavii\SQSJobQueue\Queue\Queue
+        class: Tavii\SQSJobQueueBundle\Queue
         arguments:
             - @sqs_job_queue.client
+            - { kernel.root_dir: "%kernel.root_dir%", kernel.debug: "%kernel.debug%", kernel.environment: "%kernel.environment%"}
         lazy: true
 
     sqs_job_queue.worker:
