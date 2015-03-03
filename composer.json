@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-      "tavii/sqs-job-queue": "dev-master",
+      "tavii/sqs-job-queue": "~0.0",
       "symfony/symfony": "~2.3",
       "doctrine/dbal": "~2.3"
     },
