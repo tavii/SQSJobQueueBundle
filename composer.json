@@ -1,7 +1,6 @@
 {
     "name": "tavii/sqs-job-queue-bundle",
     "license": "MIT",
-    "version": "0.0.1",
     "authors": [
         {
             "name": "polidog",
