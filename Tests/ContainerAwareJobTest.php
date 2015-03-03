@@ -11,7 +11,7 @@ class ContainerAwareJobTest extends \PHPUnit_Framework_TestCase
     {
         $job = new TestJob();
         $job->setKernelOptions(array(
-            'kernel.root_dir' => __DIR__,
+            'kernel.root_dir' => __DIR__.'/../Test',
             'kernel.debug' => false,
             'kernel.environment' => 'test'
         ));
