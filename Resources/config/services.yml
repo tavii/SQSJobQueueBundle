@@ -9,6 +9,13 @@ services:
         lazy: true
 
     sqs_job_queue.queue:
+        class: Tavii\SQSJobQueueBundle\Queue
+        arguments:
+            - @sqs_job_queue.base_queue
+            - { kernel.root_dir: "%kernel.root_dir%", kernel.debug: "%kernel.debug%", kernel.environment: "%kernel.environment%"}
+        lazy: true
+
+    sqs_job_queue.base_queue:
         class: Tavii\SQSJobQueue\Queue\Queue
         arguments:
             - @sqs_job_queue.client
@@ -19,6 +26,7 @@ services:
         arguments:
             - @sqs_job_queue.queue
             - @sqs_job_queue.storage.doctrine
+        lazy: true
 
     ###
     # storage
@@ -27,3 +35,6 @@ services:
         class: Tavii\SQSJobQueue\Storage\DoctrineStorage
         arguments:
             - @doctrine.dbal.default_connection
+        lazy: true
+
+

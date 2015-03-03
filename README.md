@@ -102,6 +102,5 @@ $this->getContainer()->get('sqs_job_queue.queue')->push($job);
 
 
 ## TODO
-- DIコンテナが使えない問題の対応
 - ストレージがDoctrineしか使えない問題の解消
 - 管理画面の提供
