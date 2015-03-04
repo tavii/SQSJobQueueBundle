@@ -1,10 +1,11 @@
 <?php
-namespace Tavii\SQSJobQueueBundle\Command;
+namespace Tavii\SQSJobQueueBundle\Tests\Command;
 
 use Phake;
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Tavii\SQSJobQueueBundle\Command\QueueCreateCommand;
 
 class QueueCreateCommandTest extends \PHPUnit_Framework_TestCase
 {

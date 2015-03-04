@@ -1,9 +1,10 @@
 <?php
-namespace Tavii\SQSJobQueueBundle\Command;
+namespace Tavii\SQSJobQueueBundle\Tests\Command;
 
 use Phake;
 use SebastianBergmann\PHPCOV\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Tavii\SQSJobQueueBundle\Command\QueueDeleteCommand;
 
 class QueueDeleteCommandTest extends \PHPUnit_Framework_TestCase
 {

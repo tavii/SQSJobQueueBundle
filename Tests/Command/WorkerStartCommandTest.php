@@ -1,9 +1,10 @@
 <?php
-namespace Tavii\SQSJobQueueBundle\Command;
+namespace Tavii\SQSJobQueueBundle\Tests\Command;
 
 use Phake;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Tavii\SQSJobQueueBundle\Command\WorkerStartCommand;
 
 class WorkerStartCommandTest extends \PHPUnit_Framework_TestCase
 {
