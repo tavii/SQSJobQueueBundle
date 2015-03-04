@@ -2,6 +2,8 @@
 namespace Tavii\SQSJobQueueBundle\Tests;
 
 
+use Tavii\SQSJobQueueBundle\ContainerAwareJob;
+
 class ContainerAwareJobTest extends \PHPUnit_Framework_TestCase
 {
     /**
