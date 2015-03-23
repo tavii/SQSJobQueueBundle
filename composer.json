@@ -8,9 +8,10 @@
         }
     ],
     "require": {
-      "tavii/sqs-job-queue": "~0.0.1",
+      "tavii/sqs-job-queue": "0.1.0.*@dev",
       "symfony/symfony": "~2.3",
-      "doctrine/dbal": "~2.3"
+      "doctrine/dbal": "~2.3",
+      "doctrine/orm": "~2.3"
     },
     "require-dev": {
         "phpunit/phpunit": "4.4.*",

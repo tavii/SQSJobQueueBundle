@@ -10,7 +10,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function pullする際にKernelOptionを渡すことができる()
+    public function receiveする際にKernelOptionを渡すことができる()
     {
         $name = "test_queue";
         $kernelOptions = array(
@@ -23,15 +23,15 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $message = Phake::mock('Tavii\SQSJobQueue\Message\Message');
         $baseQueue = Phake::mock('Tavii\SQSJobQueue\Queue\Queue');
 
-        Phake::when($baseQueue)->pull($name)
+        Phake::when($baseQueue)->receive($name)
             ->thenReturn($message);
         Phake::when($message)->getJob()
             ->thenReturn($job);
 
         $queue = new Queue($baseQueue, $kernelOptions);
-        $queue->pull($name);
+        $queue->receive($name);
 
-        Phake::verify($baseQueue)->pull($name);
+        Phake::verify($baseQueue)->receive($name);
         Phake::verify($message)->getJob();
         Phake::verify($job)->setKernelOptions($kernelOptions);
 

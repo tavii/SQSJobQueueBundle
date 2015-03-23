@@ -4,6 +4,7 @@ namespace Tavii\SQSJobQueueBundle\Tests\Command;
 use Phake;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Tavii\SQSJobQueue\Storage\EntityInterface;
 use Tavii\SQSJobQueueBundle\Command\WorkerStatusCommand;
 
 
@@ -14,15 +15,14 @@ class WorkerStatusCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function コマンドを実行することができる()
     {
-        $storage = Phake::mock('Tavii\SQSJobQueue\Storage\DoctrineStorage');
+        $storage = Phake::mock('Tavii\SQSJobQueueBundle\Storage\DoctrineStorage');
         $container = Phake::mock('Symfony\Component\DependencyInjection\Container');
 
+        $entity = new TestEntity('test','test.com', 12345);
+
+
         Phake::when($storage)->all()->thenReturn(array(
-            array(
-                'queue' => 'test',
-                'server' => 'test.com',
-                'proc_id' => 12345,
-            )
+            $entity
         ));
         Phake::when($container)->get('sqs_job_queue.storage.doctrine')->thenReturn($storage);
 
@@ -41,4 +41,49 @@ class WorkerStatusCommandTest extends \PHPUnit_Framework_TestCase
         Phake::verify($container)->get('sqs_job_queue.storage.doctrine');
         Phake::verify($storage)->all();
     }
+}
+
+
+class TestEntity implements EntityInterface
+{
+    private $queue;
+
+    private $server;
+
+    private $procId;
+
+
+    public function __construct($queue, $server, $procId)
+    {
+        $this->queue = $queue;
+        $this->server = $server;
+        $this->procId = $procId;
+
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getQueue()
+    {
+        return $this->queue;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServer()
+    {
+        return $this->server;
+    }
+
+    /**
+     * @return int
+     */
+    public function getProcId()
+    {
+        return $this->procId;
+    }
+
 }
