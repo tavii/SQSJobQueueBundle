@@ -72,7 +72,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $queue = new Queue($baseQueue, $kernelOptions);
 
         $job = new DummyContainerAwareJob();
-        $message = new Message([],$job,'test.com');
+        $message = new Message(array(),$job,'test.com');
 
         Phake::when($baseQueue)->delete($message)
             ->thenReturn(true);
