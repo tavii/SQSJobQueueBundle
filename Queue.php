@@ -10,14 +10,14 @@ class Queue implements QueueInterface
 {
 
     /**
-     * Aamazon SQS Client
-     * @var SqsClient
+     * @var Queue
      */
     private $baseQueue;
 
 
     /**
-     * @param SqsClient $client
+     * @param BaseQueue $baseQueue
+     * @param array $kernelOptions
      */
     public function __construct(BaseQueue $baseQueue, array $kernelOptions)
     {
@@ -28,9 +28,9 @@ class Queue implements QueueInterface
     /**
      * {@inheritdoc}
      */
-    public function pull($name)
+    public function receive($name)
     {
-        $message = $this->baseQueue->pull($name);
+        $message = $this->baseQueue->receive($name);
         if ($message instanceof MessageInterface) {
             $job = $message->getJob();
             if ($job instanceof ContainerAwareJob) {
@@ -44,9 +44,9 @@ class Queue implements QueueInterface
     /**
      * {@inheritdoc}
      */
-    public function push(JobInterface $job)
+    public function send(JobInterface $job)
     {
-        return $this->baseQueue->push($job);
+        return $this->baseQueue->send($job);
     }
 
     /**

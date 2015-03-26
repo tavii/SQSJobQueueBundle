@@ -1,3 +1,7 @@
+parameters:
+    tavii_sqs_job_queue.doctrine_storage: "Tavii\\SQSJobQueueBundle\\Storage\\DoctrineStorage"
+    tavii_sqs_job_queue.entity: "Tavii\SQSJobQueueBundle\Entity\SqsWorker"
+
 services:
     sqs_job_queue.client:
         class: Aws\Sqs\SqsClient
@@ -32,9 +36,15 @@ services:
     # storage
     ###
     sqs_job_queue.storage.doctrine:
-        class: Tavii\SQSJobQueue\Storage\DoctrineStorage
+        class: "%tavii_sqs_job_queue.doctrine_storage%"
         arguments:
-            - @doctrine.dbal.default_connection
+            - @doctrine.orm.entity_manager
+            - @sqs_job_queue.repository
         lazy: true
 
-
+    sqs_job_queue.repository:
+        class: Doctrine\Common\Persistence\ObjectRepository
+        factory_service: doctrine.orm.entity_manager
+        factory_method:  getRepository
+        arguments:
+            - "%tavii_sqs_job_queue.entity%"

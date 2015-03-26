@@ -10,7 +10,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function pullする際にKernelOptionを渡すことができる()
+    public function receiveする際にKernelOptionを渡すことができる()
     {
         $name = "test_queue";
         $kernelOptions = array(
@@ -23,18 +23,64 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $message = Phake::mock('Tavii\SQSJobQueue\Message\Message');
         $baseQueue = Phake::mock('Tavii\SQSJobQueue\Queue\Queue');
 
-        Phake::when($baseQueue)->pull($name)
+        Phake::when($baseQueue)->receive($name)
             ->thenReturn($message);
         Phake::when($message)->getJob()
             ->thenReturn($job);
 
         $queue = new Queue($baseQueue, $kernelOptions);
-        $queue->pull($name);
+        $queue->receive($name);
 
-        Phake::verify($baseQueue)->pull($name);
+        Phake::verify($baseQueue)->receive($name);
         Phake::verify($message)->getJob();
         Phake::verify($job)->setKernelOptions($kernelOptions);
 
+    }
+
+    /**
+     * @test
+     */
+    public function queueに登録することが出来る()
+    {
+        $kernelOptions = array(
+            'kernel.root_dir' => '.',
+            'kernel.environment' => 'test',
+            'kernel.debug' => true,
+        );
+
+        $baseQueue = Phake::mock('Tavii\SQSJobQueue\Queue\Queue');
+        $queue = new Queue($baseQueue, $kernelOptions);
+
+        $job = new DummyContainerAwareJob();
+        $queue->send($job);
+
+        Phake::verify($baseQueue)->send($job);
+    }
+
+    /**
+     * @test
+     */
+    public function 削除を行う事ができる()
+    {
+        $kernelOptions = array(
+            'kernel.root_dir' => '.',
+            'kernel.environment' => 'test',
+            'kernel.debug' => true,
+        );
+
+        $baseQueue = Phake::mock('Tavii\SQSJobQueue\Queue\Queue');
+        $queue = new Queue($baseQueue, $kernelOptions);
+
+        $job = new DummyContainerAwareJob();
+        $message = new Message(array(),$job,'test.com');
+
+        Phake::when($baseQueue)->delete($message)
+            ->thenReturn(true);
+
+        $job = new DummyContainerAwareJob();
+        $queue->delete($message);
+
+        Phake::verify($baseQueue)->delete($message);
     }
 }
 
