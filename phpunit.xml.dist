@@ -13,6 +13,8 @@
                 <directory>./Resources/</directory>
                 <directory>./vendor/</directory>
                 <directory>./Tests/</directory>
+                <directory>./DependencyInjection/</directory>
+                <file>./TaviiSQSJobQueueBundle.php</file>
             </exclude>
         </whitelist>
     </filter>
