@@ -36,6 +36,52 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         Phake::verify($job)->setKernelOptions($kernelOptions);
 
     }
+
+    /**
+     * @test
+     */
+    public function queueに登録することが出来る()
+    {
+        $kernelOptions = array(
+            'kernel.root_dir' => '.',
+            'kernel.environment' => 'test',
+            'kernel.debug' => true,
+        );
+
+        $baseQueue = Phake::mock('Tavii\SQSJobQueue\Queue\Queue');
+        $queue = new Queue($baseQueue, $kernelOptions);
+
+        $job = new DummyContainerAwareJob();
+        $queue->send($job);
+
+        Phake::verify($baseQueue)->send($job);
+    }
+
+    /**
+     * @test
+     */
+    public function 削除を行う事ができる()
+    {
+        $kernelOptions = array(
+            'kernel.root_dir' => '.',
+            'kernel.environment' => 'test',
+            'kernel.debug' => true,
+        );
+
+        $baseQueue = Phake::mock('Tavii\SQSJobQueue\Queue\Queue');
+        $queue = new Queue($baseQueue, $kernelOptions);
+
+        $job = new DummyContainerAwareJob();
+        $message = new Message([],$job,'test.com');
+
+        Phake::when($baseQueue)->delete($message)
+            ->thenReturn(true);
+
+        $job = new DummyContainerAwareJob();
+        $queue->delete($message);
+
+        Phake::verify($baseQueue)->delete($message);
+    }
 }
 
 class DummyContainerAwareJob extends ContainerAwareJob
