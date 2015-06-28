@@ -29,12 +29,13 @@ class QueueCreateCommand extends ContainerAwareCommand
     {
         $prefix = $this->getContainer()->getParameter('sqs_job_queue.prefix');
         $client = $this->getContainer()->get('sqs_job_queue.client');
-
+        $queueName = $this->getContainer()->getParameter('sqs_job_queue.prefix').$input->getArgument('queue');
         $client->createQueue(array(
-            'QueueName' => $prefix.$input->getArgument('queue'),
+            'QueueName' => $queueName,
             'Attributes' => array(
                 'DelaySeconds' => $input->getOption('deleySec')
             ),
         ));
+        $output->writeln('<info>SUCCESS:</info> '.$queueName);
     }
 }
