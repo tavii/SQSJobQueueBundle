@@ -25,10 +25,11 @@ class QueueDeleteCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $prefix = $this->getContainer()->getParameter('sqs_job_queue.prefix');
         $client = $this->getContainer()->get('sqs_job_queue.client');
         $queue = $input->getArgument('queue');
         $result = $client->getQueueUrl(array(
-            'QueueName' => $queue
+            'QueueName' => $prefix.$queue
         ));
 
         $dialog = $this->getHelper('dialog');

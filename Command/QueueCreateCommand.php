@@ -27,9 +27,11 @@ class QueueCreateCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $prefix = $this->getContainer()->getParameter('sqs_job_queue.prefix');
         $client = $this->getContainer()->get('sqs_job_queue.client');
+
         $client->createQueue(array(
-            'QueueName' => $input->getArgument('queue'),
+            'QueueName' => $prefix.$input->getArgument('queue'),
             'Attributes' => array(
                 'DelaySeconds' => $input->getOption('deleySec')
             ),
