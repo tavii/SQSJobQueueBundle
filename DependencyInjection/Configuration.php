@@ -21,6 +21,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('sqs_job_queue');
 
         $rootNode->children()
+            ->scalarNode('prefix')->defaultValue('')->end()
             ->arrayNode('aws')
                 ->children()
                     ->scalarNode('key')->end()
