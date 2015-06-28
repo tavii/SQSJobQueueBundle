@@ -32,6 +32,6 @@ class WorkerStopCommandTest extends \PHPUnit_Framework_TestCase
         ));
 
         Phake::verify($container)->get('sqs_job_queue.worker');
-        Phake::verify($worker)->stop('test', null);
+        Phake::verify($worker)->stop('test', null, false);
     }
 }
