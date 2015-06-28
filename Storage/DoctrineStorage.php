@@ -82,6 +82,20 @@ class DoctrineStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
+    public function removeForce($queue, $server)
+    {
+        /** @var SqsWorker $entity */
+        foreach ($this->find($queue, $server) as $entity) {
+            $this->entityManager->remove($entity);
+            $this->entityManager->flush();
+        }
+    }
+
+
+
+    /**
+     * {@inheritdoc}
+     */
     public function create(array $params = array())
     {
         // TODO: Implement create() method.
