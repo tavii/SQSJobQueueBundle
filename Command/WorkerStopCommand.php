@@ -20,7 +20,8 @@ class WorkerStopCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $queueName = $this->getContainer()->getParameter('sqs_job_queue.prefix').$input->getArgument('queue');
         $worker = $this->getContainer()->get('sqs_job_queue.worker');
-        $worker->stop($input->getArgument('queue'), $input->getOption('pid'));
+        $worker->stop($queueName, $input->getOption('pid'));
     }
 }

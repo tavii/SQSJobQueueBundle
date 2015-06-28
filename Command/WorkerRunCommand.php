@@ -17,7 +17,8 @@ class WorkerRunCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $queueName = $this->getContainer()->getParameter('sqs_job_queue.prefix').$input->getArgument('queue');
         $worker = $this->getContainer()->get('sqs_job_queue.worker');
-        $worker->run($input->getArgument('queue'));
+        $worker->run($queueName);
     }
 }
