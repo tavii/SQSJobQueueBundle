@@ -15,6 +15,7 @@ class WorkerStopCommand extends ContainerAwareCommand
             ->setDescription('Stop a sqs worker')
             ->addArgument('queue', InputArgument::REQUIRED, 'Queue name')
             ->addOption('pid', 'p', InputOption::VALUE_OPTIONAL, 'stop pid name', null)
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'force storage delete')
         ;
     }
 
@@ -22,6 +23,6 @@ class WorkerStopCommand extends ContainerAwareCommand
     {
         $queueName = $this->getContainer()->getParameter('sqs_job_queue.prefix').$input->getArgument('queue');
         $worker = $this->getContainer()->get('sqs_job_queue.worker');
-        $worker->stop($queueName, $input->getOption('pid'));
+        $worker->stop($queueName, $input->getOption('pid'), $input->getOption('force'));
     }
 }
