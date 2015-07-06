@@ -46,6 +46,9 @@ class Queue implements QueueInterface
      */
     public function send(JobInterface $job)
     {
+        if ($job instanceof ContainerAwareJob) {
+            $job->setKernelOptions($this->kernelOptions);
+        }
         return $this->baseQueue->send($job);
     }
 
