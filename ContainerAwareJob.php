@@ -10,6 +10,8 @@ abstract class ContainerAwareJob extends Job
 {
     private $kernel;
 
+    protected $name;
+
     public function __destruct()
     {
         if ($this->kernel instanceof KernelInterface) {
@@ -54,5 +56,13 @@ abstract class ContainerAwareJob extends Job
         );
     }
 
+    /**
+     * @return string
+     */
+    final public function getName()
+    {
+        $prefix = $this->getContainer()->getParameter('sqs_job_queue.prefix');
+        return $prefix.$this->name;
+    }
 
 }

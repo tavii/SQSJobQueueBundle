@@ -27,14 +27,12 @@ class ContainerAwareJobTest extends \PHPUnit_Framework_TestCase
 class TestJob extends ContainerAwareJob
 {
 
+    protected $name = 'name';
+
     public function run()
     {
         return $this->getContainer();
     }
 
-    public function getName()
-    {
-        return 'name';
-    }
 }
 
