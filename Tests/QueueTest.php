@@ -86,20 +86,14 @@ class QueueTest extends \PHPUnit_Framework_TestCase
 
 class DummyContainerAwareJob extends ContainerAwareJob
 {
+    protected $name = 'dummy_container_aware_job';
+
     /**
      * @return booelan
      */
     public function run()
     {
 
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-       return 'dummy_container_aware_job';
     }
 
 }
