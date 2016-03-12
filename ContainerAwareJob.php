@@ -5,6 +5,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Tavii\SQSJobQueue\Job\Job;
+use Tavii\SQSJobQueueBundle\Event\JobEvent;
 
 abstract class ContainerAwareJob extends Job
 {
@@ -17,6 +18,19 @@ abstract class ContainerAwareJob extends Job
         if ($this->kernel instanceof KernelInterface) {
             $this->kernel->shutdown();
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function execute()
+    {
+        $event = new JobEvent($this);
+        $this->getEventDispatcher()->dispatch(SQSJobQueueEvents::JOB_EXECUTE, $event);
+        $result = $this->run();
+        $event->setExecutedStatus($result);
+        $this->getEventDispatcher()->dispatch(SQSJobQueueEvents::JOB_RUN, $event);
+        return $result;
     }
 
     /**
@@ -63,6 +77,11 @@ abstract class ContainerAwareJob extends Job
     {
         $prefix = $this->getContainer()->getParameter('sqs_job_queue.prefix');
         return $prefix.$this->name;
+    }
+
+    final protected function getEventDispatcher()
+    {
+        return $this->getContainer()->get('event_dispatcher');
     }
 
 }

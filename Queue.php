@@ -1,10 +1,13 @@
 <?php
 namespace Tavii\SQSJobQueueBundle;
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Tavii\SQSJobQueue\Job\JobInterface;
 use Tavii\SQSJobQueue\Message\MessageInterface;
-use Tavii\SQSJobQueue\Queue\Queue as BaseQueue;
 use Tavii\SQSJobQueue\Queue\QueueInterface;
+use Tavii\SQSJobQueueBundle\Event\ReceiveQueueEvent;
+use Tavii\SQSJobQueueBundle\Event\SentQueueEvent;
 
 class Queue implements QueueInterface
 {
@@ -14,15 +17,28 @@ class Queue implements QueueInterface
      */
     private $baseQueue;
 
+    /**
+     * @var array
+     */
+    private $kernelOptions;
 
     /**
-     * @param BaseQueue $baseQueue
+     * @var EventDispatcher
+     */
+    private $dispatcher;
+
+
+    /**
+     * Queue constructor.
+     * @param QueueInterface $baseQueue
+     * @param EventDispatcherInterface $dispatcher
      * @param array $kernelOptions
      */
-    public function __construct(BaseQueue $baseQueue, array $kernelOptions)
+    public function __construct(QueueInterface $baseQueue, EventDispatcherInterface $dispatcher, array $kernelOptions)
     {
         $this->baseQueue = $baseQueue;
         $this->kernelOptions = $kernelOptions;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -36,6 +52,7 @@ class Queue implements QueueInterface
             if ($job instanceof ContainerAwareJob) {
                 $job->setKernelOptions($this->kernelOptions);
             }
+            $this->dispatcher->dispatch(SQSJobQueueEvents::QUEUE_RECEIVED, new ReceiveQueueEvent($message));
             return $message;
         }
         return null;
@@ -49,7 +66,9 @@ class Queue implements QueueInterface
         if ($job instanceof ContainerAwareJob) {
             $job->setKernelOptions($this->kernelOptions);
         }
-        return $this->baseQueue->send($job);
+        $result = $this->baseQueue->send($job);
+        $this->dispatcher->dispatch(SQSJobQueueEvents::QUEUE_SENT, new SentQueueEvent($job, $result));
+        return $result;
     }
 
     /**
@@ -57,12 +76,13 @@ class Queue implements QueueInterface
      */
     public function delete(MessageInterface $message)
     {
+        $result = false;
         if ($this->baseQueue->delete($message)) {
             $job = $message->getJob();
             unset($job);
-            return true;
+            $result = true;
         }
-        return false;
+        return $result;
     }
 
 

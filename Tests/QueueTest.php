@@ -2,6 +2,7 @@
 namespace Tavii\SQSJobQueueBundle;
 
 use Phake;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Tavii\SQSJobQueue\Job\booelan;
 use Tavii\SQSJobQueue\Message\Message;
 
@@ -22,14 +23,16 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $job = Phake::mock('Tavii\SQSJobQueueBundle\ContainerAwareJob');
         $message = Phake::mock('Tavii\SQSJobQueue\Message\Message');
         $baseQueue = Phake::mock('Tavii\SQSJobQueue\Queue\Queue');
+        $dispatcher = Phake::mock(EventDispatcherInterface::class);
 
         Phake::when($baseQueue)->receive($name)
             ->thenReturn($message);
         Phake::when($message)->getJob()
             ->thenReturn($job);
 
-        $queue = new Queue($baseQueue, $kernelOptions);
+        $queue = new Queue($baseQueue, $dispatcher, $kernelOptions);
         $queue->receive($name);
+
 
         Phake::verify($baseQueue)->receive($name);
         Phake::verify($message)->getJob();
@@ -49,7 +52,9 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         );
 
         $baseQueue = Phake::mock('Tavii\SQSJobQueue\Queue\Queue');
-        $queue = new Queue($baseQueue, $kernelOptions);
+        $dispatcher = Phake::mock(EventDispatcherInterface::class);
+
+        $queue = new Queue($baseQueue, $dispatcher, $kernelOptions);
 
         $job = new DummyContainerAwareJob();
         $queue->send($job);
@@ -67,9 +72,11 @@ class QueueTest extends \PHPUnit_Framework_TestCase
             'kernel.environment' => 'test',
             'kernel.debug' => true,
         );
+        $dispatcher = Phake::mock(EventDispatcherInterface::class);
+
 
         $baseQueue = Phake::mock('Tavii\SQSJobQueue\Queue\Queue');
-        $queue = new Queue($baseQueue, $kernelOptions);
+        $queue = new Queue($baseQueue, $dispatcher, $kernelOptions);
 
         $job = new DummyContainerAwareJob();
         $message = new Message(array(),$job,'test.com');
@@ -91,7 +98,7 @@ class DummyContainerAwareJob extends ContainerAwareJob
     /**
      * @return booelan
      */
-    public function run()
+    protected function run()
     {
 
     }

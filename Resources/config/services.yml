@@ -16,6 +16,7 @@ services:
         class: Tavii\SQSJobQueueBundle\Queue
         arguments:
             - @sqs_job_queue.base_queue
+            - @event_dispatcher
             - { kernel.root_dir: "%kernel.root_dir%", kernel.debug: "%kernel.debug%", kernel.environment: "%kernel.environment%"}
         lazy: true
 
