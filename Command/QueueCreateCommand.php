@@ -18,7 +18,7 @@ class QueueCreateCommand extends ContainerAwareCommand
         $this->setName('sqs_job_queue:queue-create')
             ->setDescription('create queue')
             ->addArgument('queue', InputArgument::REQUIRED, 'queue name')
-            ->addOption('deleySec', 'S', InputOption::VALUE_OPTIONAL, 'DelaySeconds', 0)
+            ->addOption('delaySec', 'S', InputOption::VALUE_OPTIONAL, 'DelaySeconds', 0)
         ;
     }
 
@@ -33,7 +33,7 @@ class QueueCreateCommand extends ContainerAwareCommand
         $client->createQueue(array(
             'QueueName' => $queueName,
             'Attributes' => array(
-                'DelaySeconds' => $input->getOption('deleySec')
+                'DelaySeconds' => $input->getOption('delaySec')
             ),
         ));
         $output->writeln('<info>SUCCESS:</info> '.$queueName);
