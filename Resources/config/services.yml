@@ -33,12 +33,19 @@ services:
             - @sqs_job_queue.storage.doctrine
         lazy: true
 
+
+    sqs_job_queue.logger:
+        class: "%doctrine.dbal.logger.class%"
+        arguments:
+
+
     sqs_job_queue.event_listenr.logging_listener:
         class: Tavii\SQSJobQueueBundle\EventListener\LoggingListener
         arguments:
             - "@logger"
         tags:
           - { name: "sqs_job_queue.event_subscriber" }
+          - { name: "monolog.logger", channel: "sqs_job_queue" }
 
     ###
     # storage
