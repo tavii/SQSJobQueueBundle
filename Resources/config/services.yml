@@ -7,30 +7,30 @@ services:
         class: Aws\Sqs\SqsClient
         factory: [Aws\Sqs\SqsClient, factory]
         arguments:
-            - key: %sqs_job_queue.aws.key%
-              secret: %sqs_job_queue.aws.secret%
-              region: %sqs_job_queue.aws.region%
+            - key: "%sqs_job_queue.aws.key%"
+              secret: "%sqs_job_queue.aws.secret%"
+              region: "%sqs_job_queue.aws.region%"
         lazy: true
 
     sqs_job_queue.queue:
         class: Tavii\SQSJobQueueBundle\Queue
         arguments:
-            - @sqs_job_queue.base_queue
-            - @event_dispatcher
+            - "@sqs_job_queue.base_queue"
+            - "@event_dispatcher"
             - { kernel.root_dir: "%kernel.root_dir%", kernel.debug: "%kernel.debug%", kernel.environment: "%kernel.environment%"}
         lazy: true
 
     sqs_job_queue.base_queue:
         class: Tavii\SQSJobQueue\Queue\Queue
         arguments:
-            - @sqs_job_queue.client
+            - "@sqs_job_queue.client"
         lazy: true
 
     sqs_job_queue.worker:
         class: Tavii\SQSJobQueue\Worker\Worker
         arguments:
-            - @sqs_job_queue.queue
-            - @sqs_job_queue.storage.doctrine
+            - "@sqs_job_queue.queue"
+            - "@sqs_job_queue.storage.doctrine"
         lazy: true
 
 
@@ -53,8 +53,8 @@ services:
     sqs_job_queue.storage.doctrine:
         class: "%tavii_sqs_job_queue.doctrine_storage%"
         arguments:
-            - @doctrine.orm.entity_manager
-            - @sqs_job_queue.repository
+            - "@doctrine.orm.entity_manager"
+            - "@sqs_job_queue.repository"
         lazy: true
 
     sqs_job_queue.repository:
