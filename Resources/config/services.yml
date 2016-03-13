@@ -39,8 +39,8 @@ services:
         arguments:
 
 
-    sqs_job_queue.event_listenr.logging_listener:
-        class: Tavii\SQSJobQueueBundle\EventListener\LoggingListener
+    sqs_job_queue.event_listenr.debug_logging_listener:
+        class: Tavii\SQSJobQueueBundle\EventListener\DebugLoggingListener
         arguments:
             - "@logger"
         tags:
