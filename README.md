@@ -9,8 +9,8 @@
 
 ## Requirements
 
-- PHP5.3+
-- Symfony2.3+
+- PHP5.6+
+- Symfony2.7+
 
 ## Installation
 
@@ -158,6 +158,31 @@ $ app/console sqs_job_queue:worker-start test
 ```
 $ app/console sqs_job_queue:worker-start test
 ```
+
+
+## EventDispatcher
+
+いくつかEventを発生させるようにしました。
+
+### SQSJobQueueEvents::QUEUE_RECEIVED
+
+SQSからキューを受け取った際にイベントが発生します。
+
+### SQSJobQueueEvents::QUEUE_SENT
+
+SQSがキューを受け付けた場合にイベントが発生します。
+
+### SQSJobQueueEvents::QUEUE_DELETED
+
+SQSのキューが削除された際にイベントが発生します。
+
+### SQSJobQueueEvents::JOB_EXECUTE
+
+Jobが実行された際にイベントが発生します。
+
+### SQSJobQueueEvents::JOB_RAN
+
+Jobの実行が完了した際にイベントが発生します。
 
 
 
