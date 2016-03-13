@@ -40,7 +40,7 @@ class DebugLoggingListener implements EventSubscriberInterface
      */
     public function onQueueReceived(ReceiveQueueEvent $event)
     {
-        $this->logger->debug("Queue Received: ",[
+        $this->logger->debug("Queue Received: ", [
             'queue_url' => $event->getMessage()->getQueueUrl(),
             'job_name' => $event->getMessage()->getJob()->getName(),
         ]);
@@ -51,7 +51,7 @@ class DebugLoggingListener implements EventSubscriberInterface
      */
     public function onQueueSent(SentQueueEvent $event)
     {
-        $this->logger->debug("Queue Send: ",[
+        $this->logger->debug("Queue Send: ", [
             'job_name' => $event->getJob()->getName(),
             'sent' => $event->isSent()
         ]);
@@ -62,7 +62,7 @@ class DebugLoggingListener implements EventSubscriberInterface
      */
     public function onQueueDeleted(DeleteQueueEvent $event)
     {
-        $this->logger->debug("Queue Delete: ",[
+        $this->logger->debug("Queue Delete: ", [
             'queue_url' => $event->getMessage()->getQueueUrl(),
             'job_name' => $event->getMessage()->getJob()->getName(),
             'deleted' => $event->isDeleted()
@@ -75,7 +75,7 @@ class DebugLoggingListener implements EventSubscriberInterface
      */
     public function onJobExecute(JobEvent $event)
     {
-        $this->logger->debug("Job Execute: ",[
+        $this->logger->debug("Job Execute: ", [
             'job_name' => $event->getJob()->getName(),
         ]);
     }
@@ -85,7 +85,7 @@ class DebugLoggingListener implements EventSubscriberInterface
      */
     public function onJobRan(JobEvent $event)
     {
-        $this->logger->debug("Job Ran: ",[
+        $this->logger->debug("Job Ran: ", [
             'job_name' => $event->getJob()->getName(),
             'execute_status' => $event->isExecutedStatus()
         ]);
