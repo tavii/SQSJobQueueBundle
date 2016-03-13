@@ -29,7 +29,7 @@ abstract class ContainerAwareJob extends Job
         $this->getEventDispatcher()->dispatch(SQSJobQueueEvents::JOB_EXECUTE, $event);
         $result = $this->run();
         $event->setExecutedStatus($result);
-        $this->getEventDispatcher()->dispatch(SQSJobQueueEvents::JOB_RUN, $event);
+        $this->getEventDispatcher()->dispatch(SQSJobQueueEvents::JOB_RAN, $event);
         return $result;
     }
 

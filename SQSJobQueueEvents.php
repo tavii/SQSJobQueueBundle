@@ -19,5 +19,5 @@ final class SQSJobQueueEvents
 
     const JOB_EXECUTE = "sqs_job_queue.job_execute";
 
-    const JOB_RUN = "sqs_job_queue.job_run";
+    const JOB_RAN = "sqs_job_queue.job_run";
 }

@@ -27,6 +27,8 @@ class TaviiSQSJobQueueExtension extends Extension
         $container->setParameter('sqs_job_queue.aws.region', $config['aws']['region']);
         $container->setParameter('sqs_job_queue.prefix', $config['prefix']);
 
+//        $container->addCompilerPass();
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
