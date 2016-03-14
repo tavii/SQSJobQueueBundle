@@ -75,10 +75,21 @@ abstract class ContainerAwareJob extends Job
      */
     final public function getName()
     {
-        $prefix = $this->getContainer()->getParameter('sqs_job_queue.prefix');
-        return $prefix.$this->name;
+        return $this->name;
     }
 
+    /**
+     * @return string
+     */
+    final public function getPrefix()
+    {
+        return $this->getContainer()->getParameter('sqs_job_queue.prefix');
+    }
+
+
+    /**
+     * @return \Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
+     */
     final protected function getEventDispatcher()
     {
         return $this->getContainer()->get('event_dispatcher');
