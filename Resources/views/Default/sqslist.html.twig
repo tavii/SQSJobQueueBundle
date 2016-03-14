@@ -1,0 +1,24 @@
+{% extends 'TaviiSQSJobQueueBundle::base.html.twig' %}
+
+{% block content %}
+    <h2 class="page-header">Queue list</h2>
+
+    <p>prefix: {{ prefix }}</p>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>QueueUrl</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for queueUrl in queueUrls %}
+            <tr>
+                <td>{{ queueUrl }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+{% endblock %}

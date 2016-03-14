@@ -1,3 +1,7 @@
-tavii_sqs_job_queue_homepage:
+tavii_sqs_job_queue_index:
     path:     /
     defaults: { _controller: TaviiSQSJobQueueBundle:Default:index }
+
+tavii_sqs_job_queue_sqslist:
+    path:     /sqslist
+    defaults: { _controller: TaviiSQSJobQueueBundle:Default:sqslist }
