@@ -4,10 +4,11 @@ namespace Tavii\SQSJobQueueBundle\Storage;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Tavii\SQSJobQueue\Queue\QueueName;
 use Tavii\SQSJobQueue\Storage\EntityInterface;
 use Tavii\SQSJobQueue\Storage\StorageInterface;
 use Tavii\SQSJobQueueBundle\Entity\SqsWorker;
-use Tavii\SQSJobQueueBundle\Exception\EntityNotFoundException;
+
 
 class DoctrineStorage implements StorageInterface
 {
@@ -34,23 +35,29 @@ class DoctrineStorage implements StorageInterface
         $this->repository = $repository;
     }
 
+    /**
+     * @return array
+     */
     public function all()
     {
         return $this->repository->findAll();
     }
 
-    public function find($queue, $server = null, $procId = null)
+    /**
+     * {@inheritdoc}
+     */
+    public function find(QueueName $queueName, $server = null, $procId = null)
     {
-        return $this->repository->findBy($this->createCriteria($queue, $server, $procId));
+        return $this->repository->findBy($this->createCriteria($queueName, $server, $procId));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function set($queue, $server, $procId)
+    public function set(QueueName $queueName, $server, $procId)
     {
         $entity = new SqsWorker();
-        $entity->setQueue($queue)
+        $entity->setQueueName($queueName)
             ->setServer($server)
             ->setProcId($procId)
         ;
@@ -62,17 +69,17 @@ class DoctrineStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function get($queue, $server, $procId)
+    public function get(QueueName $queueName, $server, $procId)
     {
-        return $this->repository->findOneBy($this->createCriteria($queue, $server, $procId));
+        return $this->repository->findOneBy($this->createCriteria($queueName, $server, $procId));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function remove($queue, $server, $procId)
+    public function remove(QueueName $queueName, $server, $procId)
     {
-        $entity = $this->get($queue, $server, $procId);
+        $entity = $this->get($queueName, $server, $procId);
         if ($entity instanceof EntityInterface) {
             $this->entityManager->remove($entity);
             $this->entityManager->flush();
@@ -82,36 +89,31 @@ class DoctrineStorage implements StorageInterface
     /**
      * {@inheritdoc}
      */
-    public function removeForce($queue, $server)
+    public function removeForce(QueueName $queueName, $server)
     {
         /** @var SqsWorker $entity */
-        foreach ($this->find($queue, $server) as $entity) {
+        foreach ($this->find($queueName, $server) as $entity) {
             $this->entityManager->remove($entity);
             $this->entityManager->flush();
         }
     }
 
 
-
     /**
-     * {@inheritdoc}
-     */
-    public function create(array $params = array())
-    {
-        // TODO: Implement create() method.
-    }
-
-    /**
-     * @param string $queue
-     * @param string $server
-     * @param int $procId
+     * @param QueueName $queueName
+     * @param string|null $server
+     * @param string|null $procId
      * @return array
      */
-    protected function createCriteria($queue, $server = null, $procId = null)
+    protected function createCriteria(QueueName $queueName, $server = null, $procId = null)
     {
         $criteria = array(
-            'queue' => $queue
+            'queue' => $queueName->getName(),
         );
+
+        if (!empty($queueName->getPrefix())) {
+            $criteria['prefix'] = $queueName->getPrefix();
+        }
 
         if ($server !== null) {
             $criteria['server'] = $server;

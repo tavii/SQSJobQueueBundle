@@ -5,6 +5,7 @@ use Phake;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Tavii\SQSJobQueue\Job\booelan;
 use Tavii\SQSJobQueue\Message\Message;
+use Tavii\SQSJobQueue\Queue\QueueName;
 
 class QueueTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,6 +15,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     public function receiveする際にKernelOptionを渡すことができる()
     {
         $name = "test_queue";
+        $queueName = new QueueName($name);
         $kernelOptions = array(
             'kernel.root_dir' => '.',
             'kernel.environment' => 'test',
@@ -25,16 +27,16 @@ class QueueTest extends \PHPUnit_Framework_TestCase
         $baseQueue = Phake::mock('Tavii\SQSJobQueue\Queue\Queue');
         $dispatcher = Phake::mock(EventDispatcherInterface::class);
 
-        Phake::when($baseQueue)->receive($name)
+        Phake::when($baseQueue)->receive($queueName)
             ->thenReturn($message);
         Phake::when($message)->getJob()
             ->thenReturn($job);
 
         $queue = new Queue($baseQueue, $dispatcher, $kernelOptions);
-        $queue->receive($name);
+        $queue->receive($queueName);
 
 
-        Phake::verify($baseQueue)->receive($name);
+        Phake::verify($baseQueue)->receive($queueName);
         Phake::verify($message)->getJob();
         Phake::verify($job)->setKernelOptions($kernelOptions);
 

@@ -6,6 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tavii\SQSJobQueue\Queue\QueueName;
 
 class WorkerStartCommand extends ContainerAwareCommand
 {
@@ -21,7 +22,7 @@ class WorkerStartCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $queueName = $this->getContainer()->getParameter('sqs_job_queue.prefix').$input->getArgument('queue');
+        $queueName = new QueueName($input->getArgument('queue'), $this->getContainer()->getParameter('sqs_job_queue.prefix'));
         $worker = $this->getContainer()->get('sqs_job_queue.worker');
         $worker->start($queueName, $input->getOption('sleep'));
     }

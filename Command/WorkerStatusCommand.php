@@ -20,7 +20,7 @@ class WorkerStatusCommand extends ContainerAwareCommand
         $storage = $this->getContainer()->get('sqs_job_queue.storage.doctrine');
 
         foreach ($storage->all() as $worker) {
-            $output->writeln("queue: {$worker->getQueue()}, server: {$worker->getServer()}, pid: {$worker->getProcId()}");
+            $output->writeln("queue: {$worker->getQueue()}, prefix: {$worker->getPrefix()}, server: {$worker->getServer()}, pid: {$worker->getProcId()}");
         }
     }
 }

@@ -1,7 +1,9 @@
 <?php
 namespace Tavii\SQSJobQueueBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Tavii\SQSJobQueue\Queue\QueueName;
 use Tavii\SQSJobQueue\Storage\EntityInterface;
+use Tavii\SQSJobQueue\Storage\EntityJobNameTrait;
 
 /**
  * Class SqsJobQueue
@@ -13,6 +15,8 @@ use Tavii\SQSJobQueue\Storage\EntityInterface;
  */
 class SqsWorker implements EntityInterface
 {
+    use EntityJobNameTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -29,6 +33,12 @@ class SqsWorker implements EntityInterface
      * @ORM\Column(type="string", name="queue", nullable=false)
      */
     protected $queue;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", name="prefix", nullable=true)
+     */
+    protected $prefix;
 
     /**
      * @ORM\Column(type="integer", name="proc_id", nullable=false)
@@ -88,6 +98,26 @@ class SqsWorker implements EntityInterface
         $this->queue = $queue;
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+
+    /**
+     * @param mixed $prefix
+     * @return $this
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+        return $this;
+    }
+
+
 
     /**
      * @return mixed
@@ -167,5 +197,16 @@ class SqsWorker implements EntityInterface
     {
         $this->updatedAt = new \DateTime();
     }
+
+    /**
+     * @param QueueName $queueName
+     */
+    public function setQueueName(QueueName $queueName)
+    {
+        $this->prefix = $queueName->getPrefix();
+        $this->queue = $queueName->getName();
+        return $this;
+    }
+
 
 }

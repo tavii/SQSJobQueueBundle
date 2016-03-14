@@ -4,7 +4,9 @@ namespace Tavii\SQSJobQueueBundle\Tests\Command;
 use Phake;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Tavii\SQSJobQueue\Queue\QueueName;
 use Tavii\SQSJobQueue\Storage\EntityInterface;
+use Tavii\SQSJobQueue\Storage\EntityJobNameTrait;
 use Tavii\SQSJobQueueBundle\Command\WorkerStatusCommand;
 
 
@@ -46,11 +48,15 @@ class WorkerStatusCommandTest extends \PHPUnit_Framework_TestCase
 
 class TestEntity implements EntityInterface
 {
+    use EntityJobNameTrait;
+
     private $queue;
 
     private $server;
 
     private $procId;
+
+    private $prefix;
 
 
     public function __construct($queue, $server, $procId)
@@ -58,6 +64,7 @@ class TestEntity implements EntityInterface
         $this->queue = $queue;
         $this->server = $server;
         $this->procId = $procId;
+        $this->prefix = "test";
 
     }
 
@@ -85,5 +92,11 @@ class TestEntity implements EntityInterface
     {
         return $this->procId;
     }
+
+    public function getPrefix()
+    {
+        return $this->prefix;
+    }
+
 
 }

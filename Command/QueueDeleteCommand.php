@@ -6,6 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tavii\SQSJobQueue\Queue\QueueName;
 
 class QueueDeleteCommand extends ContainerAwareCommand
 {
@@ -25,17 +26,17 @@ class QueueDeleteCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $prefix = $this->getContainer()->getParameter('sqs_job_queue.prefix');
         $client = $this->getContainer()->get('sqs_job_queue.client');
-        $queue = $input->getArgument('queue');
+        $queueName = new QueueName($input->getArgument('queue'), $this->getContainer()->getParameter('sqs_job_queue.prefix'));
+
         $result = $client->getQueueUrl(array(
-            'QueueName' => $prefix.$queue
+            'QueueName' => $queueName->getQueueName()
         ));
 
         $dialog = $this->getHelper('dialog');
         $ret = $dialog->askConfirmation(
             $output,
-            "<question>{$queue} delete queue?[yes or no]</question> ",
+            "<question>{$queueName->getQueueName()} delete queue?[yes or no]</question> ",
             true
         );
 

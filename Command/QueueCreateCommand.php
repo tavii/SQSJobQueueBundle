@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Tavii\SQSJobQueue\Queue\QueueName;
 
 class QueueCreateCommand extends ContainerAwareCommand
 {
@@ -29,13 +30,14 @@ class QueueCreateCommand extends ContainerAwareCommand
     {
         $prefix = $this->getContainer()->getParameter('sqs_job_queue.prefix');
         $client = $this->getContainer()->get('sqs_job_queue.client');
-        $queueName = $this->getContainer()->getParameter('sqs_job_queue.prefix').$input->getArgument('queue');
+
+        $queueName = new QueueName($input->getArgument('queue'), $this->getContainer()->getParameter('sqs_job_queue.prefix'));
         $client->createQueue(array(
-            'QueueName' => $queueName,
+            'QueueName' => $queueName->getQueueName(),
             'Attributes' => array(
                 'DelaySeconds' => $input->getOption('delaySec')
             ),
         ));
-        $output->writeln('<info>SUCCESS:</info> '.$queueName);
+        $output->writeln('<info>SUCCESS:</info> '.$queueName->getQueueName());
     }
 }

@@ -6,6 +6,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Tavii\SQSJobQueue\Job\JobInterface;
 use Tavii\SQSJobQueue\Message\MessageInterface;
 use Tavii\SQSJobQueue\Queue\QueueInterface;
+use Tavii\SQSJobQueue\Queue\QueueName;
 use Tavii\SQSJobQueueBundle\Event\ReceiveQueueEvent;
 use Tavii\SQSJobQueueBundle\Event\SentQueueEvent;
 
@@ -44,9 +45,9 @@ class Queue implements QueueInterface
     /**
      * {@inheritdoc}
      */
-    public function receive($name)
+    public function receive(QueueName $queueName)
     {
-        $message = $this->baseQueue->receive($name);
+        $message = $this->baseQueue->receive($queueName);
         if ($message instanceof MessageInterface) {
             $job = $message->getJob();
             if ($job instanceof ContainerAwareJob) {
