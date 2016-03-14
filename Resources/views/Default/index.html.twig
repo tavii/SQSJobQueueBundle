@@ -1,1 +1,29 @@
-Hello {{ name }}!
+{% extends 'TaviiSQSJobQueueBundle::base.html.twig' %}
+
+{% block content %}
+    <h2 class="page-header">Worker List</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Server</th>
+                <th>Queue</th>
+                <th>procId</th>
+                <th>CreatedAt</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for worker in workers %}
+            <tr>
+                <td>{{ worker.id }}</td>
+                <td>{{ worker.server }}</td>
+                <td>{{ worker.queue }}</td>
+                <td>{{ worker.procId }}</td>
+                <td>{{ worker.createdAt|date() }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+{% endblock %}

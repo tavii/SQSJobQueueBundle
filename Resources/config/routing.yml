@@ -1,3 +1,3 @@
 tavii_sqs_job_queue_homepage:
-    path:     /hello/{name}
+    path:     /
     defaults: { _controller: TaviiSQSJobQueueBundle:Default:index }
