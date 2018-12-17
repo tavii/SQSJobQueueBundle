@@ -1,6 +1,6 @@
 parameters:
     tavii_sqs_job_queue.doctrine_storage: "Tavii\\SQSJobQueueBundle\\Storage\\DoctrineStorage"
-    tavii_sqs_job_queue.entity: "Tavii\SQSJobQueueBundle\Entity\SqsWorker"
+    tavii_sqs_job_queue.entity: "Tavii\\SQSJobQueueBundle\\Entity\\SqsWorker"
 
 services:
     sqs_job_queue.client:
